@@ -17,7 +17,7 @@ class MainInterface:
     def load_file(self):
         file_path = filedialog.askopenfilename(
             title="Select an audio file",
-            filetypes=[("Audio Files", "*.mp3;*.aac;*.wav")]  
+            filetypes=[("Audio Files", "*.mp3 *.aac *.wav"), ("All Files", "*.*")]
         )
         print(f"Selected file path: {file_path}") 
         if file_path: 
