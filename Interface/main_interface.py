@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-from Controls.audio_control import AudioControl
+from controls.audio_control import AudioControl
 class MainInterface:
     def __init__(self, root, audio_control=None):
         

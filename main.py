@@ -1,6 +1,6 @@
 import tkinter as tk
-from Interface.main_interface import MainInterface
-from Controls.audio_control import AudioControl
+from interface.main_interface import MainInterface
+from controls.audio_control import AudioControl
 
 
 def main():
