@@ -19,10 +19,10 @@ class AudioControl:
             return os.path.basename(self.current_file)
         else:
             return "No  file loaded"
-    def process_audio(self):
+    def analyze_audio(self):
         if not self.current_file:
-            print("No audio file processing")
+            print("No audio file to analyze")
             return False
         
-        print(f"Processing audio file: {self.current_file}")
+        print(f"Analyzing audio file: {self.current_file}")
         return True
