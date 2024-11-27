@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
 from controls.audio_control import AudioControl
-
 class MainInterface:
     def __init__(self, root, audio_control=None):
         
@@ -35,7 +34,7 @@ class MainInterface:
             self.update_file_label("No file selected")
 
     def update_file_label(self, file_path):
-        self.file_label.config(text=f"Loaded File: {self.audio_control.audio_model.get_file_name}")
+        self.file_label.config(text=f"Loaded File: {self.audio_control.audio_model.file_name}")
     
     def display_metadata(self):
         metadata = self.audio_control.get_file_metadata()

@@ -20,12 +20,11 @@ class AudioModel:
         audio_file = File(file_path)
         if audio_file:
             self.duration = audio_file.info.length if hasattr(audio_file.info, 'length') else None
-            self.sample_rate = audio_file.info.sameple_rate if hasattr(audio_file.info, 'sample_rate') else None
+            self.sample_rate = audio_file.info.sample_rate if hasattr(audio_file.info, 'sample_rate') else None
     def get_metadata(self):# returns file metadata as a dictionary
-        return
-        {
+        return{
             "File Name: ": self.file_name,
-            "Duration (s): ": round(self,duration, 2) if self.duration else "Unknown", 
+            "Duration (s): ": round(self.duration, 2) if self.duration else "Unknown", 
             "Sample Rate (Hz): ": self.sample_rate if self.sample_rate else "Unknown",
         }
 
