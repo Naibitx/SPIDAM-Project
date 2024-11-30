@@ -1,4 +1,5 @@
 import os
+from pydub import AudioSegment
 from mutagen import File
 
 class AudioModel:
@@ -10,8 +11,16 @@ class AudioModel:
 
         if file_path:
             self.load_file(file_path)
-
+    def convert_to_wav(self, file_path): #conversion
+        if not file_path.endswith(".wav"):
+            audio = AudioSegment.from_file(file_path)
+            wav_path=f"{os.path.splitext(file_path)[0]}.wav"
+            audio.export(wav_path, format="wav")
+            return wav_path
+        return file_path
+    
     def load_file(self, file_path):#loads audio and extracts metadata
+        self.file_path = self.convert_to_wav(file_path)
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"File {file_path} does not exist")
         self.file_path = file_path

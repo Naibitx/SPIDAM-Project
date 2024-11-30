@@ -1,4 +1,7 @@
 import os
+import numpy as np
+from scipy.io import wavfile
+from scipy.fft import fft
 from models.audio_model import AudioModel
 
 class AudioControl:
@@ -31,3 +34,13 @@ class AudioControl:
 
         print(f"Analyzing audio file: {self.audio_model.file_path}")
         return True
+    
+    '''Analyzing Audio'''
+    def get_waveform(self):
+        if not self.audio_model.file_path:
+            raise ValueError("No audio file loaded")
+        sample_rate, data = wavfile.read(self.audio_model.file_path)
+        fft_data = fft(data)
+        frequencies= np.fftfreq(len(data), 1 / sample_rate)
+        return frequencies[: len(frequencies) // 2], np.abs(fft_data[:len(fft_data) // 2])
+
