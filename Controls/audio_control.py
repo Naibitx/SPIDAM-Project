@@ -17,8 +17,8 @@ class AudioControl:
         except FileNotFoundError as fnfe:
             print(str(fnfe))
             return False
-        except Exception as fnfe:
-            print(f"Failed to load file: {str(fnfe)}")
+        except Exception as e:
+            print(f"Failed to load file: {str(e)}")
             return False
         
     def get_file_metadata(self):#gets the metadata for the audio model
