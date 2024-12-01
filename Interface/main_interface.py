@@ -51,7 +51,7 @@ class MainInterface:
     def visualize_waveform(self):
         try: 
             if self.audio_control.audio_model.file_path:
-                plot_waveform(self.audio_control.audio_model.file_path, self.waveform_frame)
+                plot_waveform(self.audio_control.audio_model.file_path, self.visualization_frame)
             else:
                 print("No audio file loaded to visualize.")
         except Exception as e:
@@ -60,7 +60,7 @@ class MainInterface:
     def visualize_frequency(self):
         try:  
             if self.audio_control.audio_model.file_path:
-                plot_frequency(self.audio_control.audio_model.file_path, self.frequency_frame)
+                plot_frequency(self.audio_control.audio_model.file_path, self.visualization_frame)
             else:
                 print("No audio file loaded to visualize.")
         except Exception as e:
