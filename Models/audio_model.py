@@ -1,4 +1,5 @@
 import os
+from scipy.io import wavfile
 from pydub import AudioSegment
 from mutagen import File
 
@@ -18,18 +19,27 @@ class AudioModel:
             audio.export(wav_path, format="wav")
             return wav_path
         return file_path
-    
-    def load_file(self, file_path):#loads audio and extracts metadata
+        
+    def load_file(self, file_path):
         self.file_path = self.convert_to_wav(file_path)
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"File {file_path} does not exist")
-        self.file_path = file_path
-        self.file_name = os.path.basename(file_path)
+        if not os.path.exists(self.file_path):
+            raise FileNotFoundError(f"File {self.file_path} does not exist")
+        self.file_name = os.path.basename(self.file_path)
 
-        audio_file = File(file_path)
-        if audio_file:
-            self.duration = audio_file.info.length if hasattr(audio_file.info, 'length') else None
-            self.sample_rate = audio_file.info.sample_rate if hasattr(audio_file.info, 'sample_rate') else None
+        try:
+            audio_file = File(self.file_path)
+            if audio_file:
+                self.duration = getattr(audio_file.info, 'length', None)
+                self.sample_rate = getattr(audio_file.info, 'sample_rate', None)
+        except Exception as e:
+            print(f"Failed to load metadata using mutagen: {e}")
+
+            ''' Use scipy to get metadata for WAV files as a fallback'''
+            if self.file_path.endswith('.wav'):
+                sample_rate, data = wavfile.read(self.file_path)
+                self.sample_rate = sample_rate
+                self.duration = len(data) / sample_rate
+
     def get_metadata(self):# returns file metadata as a dictionary
         return{
             "File Name: ": self.file_name,
