@@ -31,8 +31,8 @@ class MainInterface:
         self.frequency_button.pack(pady=10)
 
         '''Visualization Frames'''
-        self.waveform_frame = tk.Frame(self.root, bg="white", height=300)
-        self.waveform_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+        self.visualization_frame = tk.Frame(self.root, bg="white", height=300)
+        self.visualization_frame.pack(fill=tk.BOTH, expand=True, pady=10)
 
     def load_file(self):
         file_path = filedialog.askopenfilename(
