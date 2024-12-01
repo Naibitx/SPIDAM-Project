@@ -18,11 +18,7 @@ class MainInterface:
         '''Displaying metadata'''
         self.metadata_label = tk.Label(self.root, text="", justify= "left")
         self.metadata_label.pack(pady=10)
-
-        '''Audio Processing'''
-        self.analyze_button= tk.Button(self.root, text = "Analyze Audio", command=self.analyze_audio)
-        self.analyze_button.pack(pady=10)
-
+        
         '''Buttons for Visualization'''
         self.waveform_button = tk.Button(self.root, text="Show Waveform", command=self.visualize_waveform)
         self.waveform_button.pack(pady=10)
@@ -41,7 +37,7 @@ class MainInterface:
         )
         if file_path and self.audio_control.load_file(file_path): 
             self.update_file_label(file_path)
-            self.display_metadata()
+            self.display_metadata()#display metadata immediately
         else:
             self.update_file_label("No file selected")
 
