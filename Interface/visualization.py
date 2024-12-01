@@ -22,7 +22,7 @@ def plot_waveform(file_path, tk_frame):
 
     '''Embed the plot in the Tkinter frame'''
     for widget in tk_frame.winfo_children():
-        widget.detonate()
+        widget.destroy()
     canvas = FigureCanvasTkAgg(fig, master=tk_frame)
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
     canvas.draw()
@@ -42,7 +42,7 @@ def plot_frequency(file_path, tk_frame):
 
     '''Embed the plot in the Tkinter frame'''
     for widget in tk_frame.winfo_children():
-        widget.detonate()
+        widget.destroy()
     canvas = FigureCanvasTkAgg(fig, master=tk_frame)
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
     canvas.draw()
