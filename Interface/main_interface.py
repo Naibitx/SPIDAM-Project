@@ -23,19 +23,16 @@ class MainInterface:
         self.analyze_button= tk.Button(self.root, text = "Analyze Audio", command=self.analyze_audio)
         self.analyze_button.pack(pady=10)
 
-        '''Visualization Frames'''
-        self.waveform_frame = tk.Frame(self.root, bg="white", height=300)
-        self.waveform_frame.pack(fill=tk.BOTH, expand=True, pady=10)
-
-        self.frequency_frame = tk.Frame(self.root, bg="white", height=300)
-        self.frequency_frame.pack(fill=tk.BOTH, expand=True, pady=10)
-
         '''Buttons for Visualization'''
         self.waveform_button = tk.Button(self.root, text="Show Waveform", command=self.visualize_waveform)
         self.waveform_button.pack(pady=10)
 
         self.frequency_button = tk.Button(self.root, text="Show Frequency ", command=self.visualize_frequency)
         self.frequency_button.pack(pady=10)
+
+        '''Visualization Frames'''
+        self.waveform_frame = tk.Frame(self.root, bg="white", height=300)
+        self.waveform_frame.pack(fill=tk.BOTH, expand=True, pady=10)
 
     def load_file(self):
         file_path = filedialog.askopenfilename(
@@ -52,9 +49,7 @@ class MainInterface:
         self.file_label.config(text=f"Loaded File: {self.audio_control.audio_model.file_name}")
 
     def visualize_waveform(self):
-        try:
-            for widget in self.waveform_frame.winfo_children():
-                widget.destroy() 
+        try: 
             if self.audio_control.audio_model.file_path:
                 plot_waveform(self.audio_control.audio_model.file_path, self.waveform_frame)
             else:
@@ -63,9 +58,7 @@ class MainInterface:
             print(f"Error visualizing waveform: {e}")
 
     def visualize_frequency(self):
-        try:
-            for widget in self.frequency_frame.winfo_children():
-                widget.destroy()  
+        try:  
             if self.audio_control.audio_model.file_path:
                 plot_frequency(self.audio_control.audio_model.file_path, self.frequency_frame)
             else:
