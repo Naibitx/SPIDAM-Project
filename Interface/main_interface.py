@@ -2,7 +2,11 @@ import tkinter as tk
 from tkinter import filedialog
 from controls.audio_control import AudioControl
 from interface.visualization import plot_frequency, plot_waveform
+
 class MainInterface:
+
+
+
     def __init__(self, root, audio_control=None):
         
         self.root = root
@@ -63,10 +67,14 @@ class MainInterface:
             print(f"Error visualizing frequency spectrum: {e}")
 
     def display_metadata(self):
-        metadata = self.audio_control.get_file_metadata()
-        metadata_text = "\n".join(f"{key}: {value}" for key, value in metadata.items())
-        self.metadata_label.config(text=metadata_text)
+        # Get the metadata from the loaded audio model
+        metadata = self.audio_control.audio_model.get_metadata()
 
+        # Format the metadata as a string
+        metadata_text = "\n".join([f"{key} {value}" for key, value in metadata.items()])
+
+        # Update the metadata_label with the formatted metadata
+        self.metadata_label.config(text=metadata_text)
     def analyze_audio(self):
         if not self.audio_control.analyze_audio():
             print("Failed to analyze audio file")

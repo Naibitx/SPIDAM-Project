@@ -4,6 +4,7 @@ from controls.audio_control import AudioControl
 from models.audio_model import AudioModel
 
 
+
 def main():
     root = tk.Tk()
     root.title("Data Acoustic Modeling Application")
