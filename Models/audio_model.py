@@ -2,9 +2,11 @@ import os
 import numpy as np
 from scipy.io import wavfile
 from scipy.fft import fft
-from pydub import AudioSegment
 from mutagen import File
+import scipy.signal
 from pydub import AudioSegment
+
+
 
 AudioSegment.converter = "/usr/local/bin/ffmpeg"
 AudioSegment.ffprobe = "/usr/local/bin/ffprobe"
@@ -17,6 +19,10 @@ class AudioModel:
         self.sample_rate = None
         self.resonant_frequency = None
         self.rt60_diff = None
+        self.low_rt60 = 0.0
+        self.mid_rt60 = 0.0
+        self.high_rt60 = 0.0
+        self.all_rt60 = 0.0
 
         if file_path:
             self.load_file(file_path)
@@ -48,7 +54,7 @@ class AudioModel:
                 self.sample_rate = audio_file.info.sample_rate if hasattr(audio_file.info, 'sample_rate') else None
 
     def calculate_resonant_frequency(self, data, sample_rate):
-        """ Calculate the resonant frequency using FFT """
+        ''' Calculate the resonant frequency using FFT '''
         # Ensure that the data is in the correct format (1D array)
         if len(data.shape) > 1:
             data = data[:, 0]  # If stereo, take just one channel
@@ -69,13 +75,38 @@ class AudioModel:
         return peak_frequency
         
     def calculate_rt60_diff(self, data, sample_rate):
-        """ Placeholder for RT60 calculation (simplified) """
-        rt60_time = 1.5  #example RT60 time in seconds
-        rt60_diff = rt60_time - 0.5  #difference from 0.5s (optimal reverb time for intelligibility)
-        return rt60_diff
+        if len (data.shape) > 1:
+            data = data[:, 0]
+        bands_filter = {#this defines the low, mid and high bands 
+            'low': scipy.signal.butter(3, [100, 500], btype='band', fs=sample_rate, output='sos'),
+            'mid': scipy.signal.butter(3, [500, 2000], btype='band', fs=sample_rate, output='sos'),
+            'high': scipy.signal.butter(3, [2000, 8000], btype='band', fs=sample_rate, output='sos'),
+            }
+        rt60_values= {}
+        for band, filter_sos in bands_filter.items():
+            filtered_signals = scipy.signal.sosfilt(filter_sos, data)
+            rt60_values[band]= self.estimate.rt60(filtered_signals, sample_rate)
+
+        '''Below the RT60 Differences will be calculated'''
+        self.low_rt60= rt60_values['low']
+        self.mid_rt60= rt60_values['mid']
+        self.high_rt60= rt60_values['high']
+        self.all_rt60= np.mean(list(rt60_values.values())) 
+        return self.all_rt60 - 0.5
+
+    def estimate_rt60(self, signal, sample_rate):
+        energy = np.cumsum(signal[::-1]**2)[::-1]
+        energy_to_db= 10 * np.log10(energy / np.max(energy)) # converting to dB
+        try: 
+            t_5db = np.where(energy_to_db <= -5)[0][0]
+            t_35db= np.where(energy_to_db <= -35)[0][0]
+            t_diff = (t_35db - t_5db) / sample_rate # this is converting the samples to seconds
+            return t_diff * 2
+        except IndexError:
+            return None
     
     def get_metadata(self):
-        """ Returns metadata and calculated values as a dictionary """
+        '''Returns metadata and calculated values as a dictionary '''
         return {
             "File Name: ": self.file_name,
             "Duration (s): ": round(self.duration, 2) if self.duration else "Unknown",
@@ -85,7 +116,7 @@ class AudioModel:
 
 
     def reset(self):
-            """ Resets model to its initial state """
+            ''' Resets model to its initial state '''
             self.file_path = None
             self.file_name = None
             self.duration = None
