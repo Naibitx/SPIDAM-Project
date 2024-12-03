@@ -85,7 +85,7 @@ class AudioModel:
         rt60_values= {}
         for band, filter_sos in bands_filter.items():
             filtered_signals = scipy.signal.sosfilt(filter_sos, data)
-            rt60_values[band]= self.estimate.rt60(filtered_signals, sample_rate)
+            rt60_values[band]= self.estimate_rt60(filtered_signals, sample_rate)
 
         '''Below the RT60 Differences will be calculated'''
         self.low_rt60= rt60_values['low']

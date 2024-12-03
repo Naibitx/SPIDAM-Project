@@ -2,7 +2,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from scipy.io import wavfile
 from scipy.signal import spectrogram
+import scipy.signal
 import tkinter as tk
+import matplotlib.pyplot as plt
 import numpy as np
 
 def plot_waveform(file_path, tk_frame):
@@ -30,17 +32,15 @@ def plot_frequency(file_path, tk_frame):
     '''Embed the spectrogram plot into a Tkinter frame.'''
     sample_rate, data = wavfile.read(file_path)
 
-    # Handle stereo audio by converting to mono (average the two channels)
     if len(data.shape) > 1:
-        data = data.mean(axis=1)  # Convert stereo to mono
+        data = data.mean(axis=1)  
 
-    # Ensure nperseg is appropriate for the length of the data
     nperseg = min(256, len(data) // 2)
 
-    # Compute the spectrogram
     frequencies, time, S_density = spectrogram(data, sample_rate, nperseg=nperseg)
 
-    # Create the plot
+    S_density[S_density == 0] = 1e-10
+
     fig = Figure(figsize=(6, 4))
     axis = fig.add_subplot(111)
     pmc = axis.pcolormesh(time, frequencies, 10 * np.log10(S_density), shading='gouraud')
@@ -48,10 +48,41 @@ def plot_frequency(file_path, tk_frame):
     axis.set_xlabel("Time (s)")
     axis.set_ylabel("Frequency (Hz)")
 
-    # Add a colorbar
     fig.colorbar(pmc, ax=axis, label="Power (dB)")
 
-    # Embed the plot in the Tkinter frame
+    for widget in tk_frame.winfo_children():
+        widget.destroy()
+    canvas = FigureCanvasTkAgg(fig, master=tk_frame)
+    canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+    canvas.draw()
+
+def plot_rt60_bands(file_path, bands, tk_frame):
+    
+    sample_rate, data = wavfile.read(file_path)
+
+    if len(data.shape) > 1:
+        data = data[:, 0]
+    band_ranges = {"low": (100,500), "mid":(500,2000), "high": (2000, 8000)}
+    if bands not in band_ranges:
+        raise ValueError(f"invalid band: {bands}")
+    
+    sos= scipy.signal.butter(3, band_ranges[bands], btype ='band', fs= sample_rate, output = 'sos')
+    filtered_signal=scipy.signal.sosfilt(sos, data)
+
+    energy = np.cumsum(filtered_signal[::-1]**2)[::-1]
+    energy_to_db= 10 * np.log10(energy / np.max(energy))
+
+    fig = Figure(figsize=(6, 4))
+    axis = fig.add_subplot(111)
+    time = np.arange(len(energy_to_db)) / sample_rate
+    axis.plot(time, energy_to_db, label=f"RT60 - {bands.capitalize()} Band")
+    axis.axhline(y=-5, color="r", linestyle="--", label="-5 dB")
+    axis.axhline(y=-35, color="b", linestyle="--", label="-35 dB")
+    axis.set_title(f"RT60 Graph - {bands} Band")
+    axis.set_xlabel("Time (s)")
+    axis.set_ylabel("Energy (dB)")
+    axis.legend()
+
     for widget in tk_frame.winfo_children():
         widget.destroy()
     canvas = FigureCanvasTkAgg(fig, master=tk_frame)
