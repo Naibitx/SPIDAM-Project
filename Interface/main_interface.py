@@ -45,7 +45,7 @@ class MainInterface:
         self.waveform_button = tk.Button(self.buttons_frame, text="Show Waveform", command=self.visualize_waveform, width=button_width, height=button_height)
         self.waveform_button.grid(row=0, column=0, padx=10)
 
-        self.frequency_button = tk.Button(self.buttons_frame, text="Show ", command=self.visualize_frequency, width=button_width, height=button_height)
+        self.frequency_button = tk.Button(self.buttons_frame, text="Show Intensity ", command=self.visualize_frequency, width=button_width, height=button_height)
         self.frequency_button.grid(row=0, column=1, padx=10)
 
         #RT60 Graph button
