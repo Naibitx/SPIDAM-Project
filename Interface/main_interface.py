@@ -13,10 +13,6 @@ class MainInterface:
         self.setup_ui()
 
     def setup_ui(self):
-        # Set window size and prevent resizing
-        self.root.geometry("800x800")
-        self.root.resizable(False, False)
-
         # Frame to hold Load File button and file label, placed at the top-left
         self.load_frame = tk.Frame(self.root)
         self.load_frame.grid(row=0, column=0, sticky='w', padx=10, pady=10)
@@ -29,34 +25,42 @@ class MainInterface:
         self.file_label = tk.Label(self.load_frame, text="No file loaded", anchor='w')
         self.file_label.grid(row=0, column=1, padx=10, pady=5)  # Next to the button in grid
 
-        # Displaying metadata below the file load section
-        self.metadata_label = tk.Label(self.root, text="", justify="left")
-        self.metadata_label.grid(row=6, column=0, sticky='w', pady=10)
-
         # Frame to hold visualizations (waveform, frequency spectrum, RT60)
         self.visualization_frame = tk.Frame(self.root, bg="white", height=300)
-        self.visualization_frame.grid(row=2, column=0,columnspan=2, sticky='nsew', padx=10, pady=10)
+        self.visualization_frame.grid(row=1, column=0, columnspan=2, sticky='nsew', padx=10, pady=10)
 
-        # Visualization Buttons
-        self.waveform_button = tk.Button(self.root, text="Show Waveform", command=self.visualize_waveform)
-        self.waveform_button.grid(row=3, column=0, padx=10, pady=10)
+        # Displaying metadata above the buttons
+        self.metadata_frame = tk.Frame(self.root)
+        self.metadata_frame.grid(row=2, column=0, sticky='w', padx=10, pady=10)
 
-        self.frequency_button = tk.Button(self.root, text="Show Frequency", command=self.visualize_frequency)
-        self.frequency_button.grid(row=4, column=0, padx=10, pady=10)
+        self.metadata_label = tk.Label(self.metadata_frame, text="", justify="left")
+        self.metadata_label.grid(row=0, column=0, padx=10, pady=5)
+
+        # Buttons for visualization, placed side by side below the metadata
+        self.buttons_frame = tk.Frame(self.root)
+        self.buttons_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
+
+        self.waveform_button = tk.Button(self.buttons_frame, text="Show Waveform", command=self.visualize_waveform)
+        self.waveform_button.grid(row=0, column=0, padx=10)
+
+        self.frequency_button = tk.Button(self.buttons_frame, text="Show Frequency", command=self.visualize_frequency)
+        self.frequency_button.grid(row=0, column=1, padx=10)
 
         # RT60 Graph button
-        self.rt60_button = tk.Button(self.root, text="Show RT60 Graph", command=self.display_rt60_graph)
-        self.rt60_button.grid(row=5, column=0, padx=10, pady=10)
+        self.rt60_button = tk.Button(self.buttons_frame, text="Show RT60 Graph", command=self.display_rt60_graph)
+        self.rt60_button.grid(row=0, column=2, padx=10)
 
-        # RT60 Navigation buttons
+        # RT60 Navigation buttons (below the main buttons)
         self.rt60_previous_button = tk.Button(self.root, text="<--", command=self.previous_band)
-        self.rt60_previous_button.grid(row=6, column=0, pady=10, sticky='w')
+        self.rt60_previous_button.grid(row=4, column=0, pady=10, sticky='w')
 
         self.rt60_next_button = tk.Button(self.root, text="-->", command=self.next_band)
-        self.rt60_next_button.grid(row=6, column=1, pady=10, sticky='w')
-        
+        self.rt60_next_button.grid(row=4, column=1, pady=10, sticky='w')
+
         # Ensure that grid expands to fill available space
-        self.root.grid_rowconfigure(2, weight=1)
+        self.root.grid_rowconfigure(1, weight=1) 
+        self.root.grid_rowconfigure(2, weight=0)  
+        self.root.grid_rowconfigure(3, weight=0)  
         self.root.grid_columnconfigure(0, weight=1)
 
     def previous_band(self):
