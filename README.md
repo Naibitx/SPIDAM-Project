@@ -1,5 +1,5 @@
 
-# Interactive Data Acoustic Modeling▶
+# Interactive Data Acoustic Modeling
 ## Project Description
 Ssoftware application designed to process and visualize audio data, providing users with interactive tools to analyze various aspects of sound. By leveraging signal processing techniques, the tool enables users to examine waveforms, spectrograms, and RT60 graphs in real-time, enhancing the understanding of complex acoustic properties. 
 
