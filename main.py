@@ -8,7 +8,8 @@ from models.audio_model import AudioModel
 def main():
     root = tk.Tk()
     root.title("Data Acoustic Modeling Application")
-    root.geometry("600x400")
+    root.geometry("800x800")
+    root.resizable(False, False)
 
     audio_model = AudioModel()
     audio_control = AudioControl()
