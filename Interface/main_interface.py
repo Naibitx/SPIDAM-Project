@@ -22,16 +22,17 @@ class MainInterface:
         self.file_label = tk.Label(self.load_frame, text="No file loaded", anchor='w')
         self.file_label.grid(row=0, column=1, padx=10, pady=5)  
 
-        #frame to hold visualizations (waveform, frequency spectrum, RT60)
-        self.visualization_frame = tk.Frame(self.root, bg="white", height=300)
-        self.visualization_frame.grid(row=1, column=0, columnspan=2, sticky='nsew', padx=10, pady=10)
-
         #displaying metadata above the buttons
         self.metadata_frame = tk.Frame(self.root)
         self.metadata_frame.grid(row=2, column=0, sticky='w', padx=10, pady=10)
 
         self.metadata_label = tk.Label(self.metadata_frame, text="", justify="left")
         self.metadata_label.grid(row=0, column=0, padx=10, pady=5)
+
+        #frame to hold visualizations (waveform, frequency spectrum, RT60)
+        self.visualization_frame = tk.Frame(self.root, bg="white", height=300)
+        self.visualization_frame.grid(row=1, column=0, columnspan=2, sticky='nsew', padx=10, pady=10)
+
         
         button_width= 20
         button_height= 1
