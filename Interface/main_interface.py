@@ -9,21 +9,18 @@ class MainInterface:
         self.root = root
         self.audio_control = audio_control or AudioControl()
         self.current_band = 0
-        self.bands = ["low", "mid", "high", "all"]
+        self.bands = ["Low RT60 Graph", "Mid RT60 Graph", "High RT60 Graph", "Combined RT60 Graphs"]
         self.setup_ui()
 
     def setup_ui(self):
-        # Frame to hold Load File button and file label, placed at the top-left
         self.load_frame = tk.Frame(self.root)
         self.load_frame.grid(row=0, column=0, sticky='w', padx=10, pady=10)
 
-        # 'Load File' button aligned to the left inside the load_frame
         self.load_button = tk.Button(self.load_frame, text="Load File", command=self.load_file)
-        self.load_button.grid(row=0, column=0, padx=10, pady=5)  # Align left in grid
+        self.load_button.grid(row=0, column=0, padx=10, pady=5) 
 
-        # File label aligned to the left inside the load_frame, next to the button
         self.file_label = tk.Label(self.load_frame, text="No file loaded", anchor='w')
-        self.file_label.grid(row=0, column=1, padx=10, pady=5)  # Next to the button in grid
+        self.file_label.grid(row=0, column=1, padx=10, pady=5)  
 
         # Frame to hold visualizations (waveform, frequency spectrum, RT60)
         self.visualization_frame = tk.Frame(self.root, bg="white", height=300)
@@ -35,27 +32,26 @@ class MainInterface:
 
         self.metadata_label = tk.Label(self.metadata_frame, text="", justify="left")
         self.metadata_label.grid(row=0, column=0, padx=10, pady=5)
+        
+        button_width= 20
+        button_height= 1
 
-        # Buttons for visualization, placed side by side below the metadata
+        # Buttons for visualization
         self.buttons_frame = tk.Frame(self.root)
         self.buttons_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
 
-        self.waveform_button = tk.Button(self.buttons_frame, text="Show Waveform", command=self.visualize_waveform)
+        self.waveform_button = tk.Button(self.buttons_frame, text="Show Waveform", command=self.visualize_waveform, width=button_width, height=button_height)
         self.waveform_button.grid(row=0, column=0, padx=10)
 
-        self.frequency_button = tk.Button(self.buttons_frame, text="Show Frequency", command=self.visualize_frequency)
+        self.frequency_button = tk.Button(self.buttons_frame, text="Show ", command=self.visualize_frequency, width=button_width, height=button_height)
         self.frequency_button.grid(row=0, column=1, padx=10)
 
         # RT60 Graph button
-        self.rt60_button = tk.Button(self.buttons_frame, text="Show RT60 Graph", command=self.display_rt60_graph)
-        self.rt60_button.grid(row=0, column=2, padx=10)
-
-        # RT60 Navigation buttons (below the main buttons)
-        self.rt60_previous_button = tk.Button(self.root, text="<--", command=self.previous_band)
-        self.rt60_previous_button.grid(row=4, column=0, pady=10, sticky='w')
-
-        self.rt60_next_button = tk.Button(self.root, text="-->", command=self.next_band)
-        self.rt60_next_button.grid(row=4, column=1, pady=10, sticky='w')
+        self.rt60_var = tk.StringVar(self.root)
+        self.rt60_var.set(self.bands[0])  # Default selection (low band)
+        self.rt60_dropdown = tk.OptionMenu(self.buttons_frame, self.rt60_var, *self.bands, command=self.display_rt60_graph)
+        self.rt60_dropdown.config(width=button_width, height=button_height)  
+        self.rt60_dropdown.grid(row=0, column=2, padx=10, pady=10)
 
         # Ensure that grid expands to fill available space
         self.root.grid_rowconfigure(1, weight=1) 
@@ -63,21 +59,33 @@ class MainInterface:
         self.root.grid_rowconfigure(3, weight=0)  
         self.root.grid_columnconfigure(0, weight=1)
 
-    def previous_band(self):
-        self.current_band = (self.current_band- 1) % len(self.bands)
-        self.display_rt60_graph()
-    
-    def next_band(self):
-        self.current_band = (self.current_band+ 1) % len(self.bands)
-        self.display_rt60_graph()
-    
-    def display_rt60_graph(self):
+    def display_rt60_graph(self, selected_band):
         if not self.audio_control.audio_model.file_path:
             print("No audio to load")
             return
-        band = self.bands[self.current_band]
-        print(f"RT60 {band} Band")
-        plot_rt60_bands(self.audio_control.audio_model.file_path, band, self.visualization_frame)
+
+        # Map dropdown values to band names
+        band_mapping = {
+            "Low RT60 Graph": "low",
+            "Mid RT60 Graph": "mid",
+            "High RT60 Graph": "high",
+            "Combined RT60 Graphs": "all"
+        }
+
+        band = band_mapping.get(selected_band)
+        if band is None:
+            print(f"Error: Invalid band selected: {selected_band}")
+            return
+
+        # Clear any existing graph in the visualization frame
+        for widget in self.visualization_frame.winfo_children():
+            widget.destroy()
+
+        # Plot the new RT60 graph
+        try:
+            plot_rt60_bands(self.audio_control.audio_model.file_path, band, self.visualization_frame)
+        except ValueError as e:
+            print(f"Error: {e}")
 
     def load_file(self):
         file_path = filedialog.askopenfilename(
@@ -116,7 +124,7 @@ class MainInterface:
 
         metadata_text = "\n".join([f"{key} {value}" for key, value in metadata.items()])
 
-        self.metadata_label.config(text=metadata_text)
+        self.metadata_label.config(text=metadata_text,font=("Courier New", 14))
     def analyze_audio(self):
         if not self.audio_control.analyze_audio():
             print("Failed to analyze audio file")

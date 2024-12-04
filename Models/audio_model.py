@@ -26,6 +26,7 @@ class AudioModel:
 
         if file_path:
             self.load_file(file_path)
+
     def convert_to_wav(self, file_path): #conversion
         if not file_path.endswith(".wav"):
             audio = AudioSegment.from_file(file_path)
