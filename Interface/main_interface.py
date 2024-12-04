@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+from PIL import Image, ImageTk 
 from controls.audio_control import AudioControl
 from interface.visualization import plot_frequency, plot_waveform, plot_rt60_bands
 
@@ -87,7 +88,7 @@ class MainInterface:
             plot_rt60_bands(self.audio_control.audio_model.file_path, band, self.visualization_frame)
         except ValueError as e:
             print(f"Error: {e}")
-
+    
     def load_file(self):
         file_path = filedialog.askopenfilename(
             title="Select an audio file",
@@ -98,7 +99,7 @@ class MainInterface:
             self.display_metadata()#display metadata immediately
         else:
             self.update_file_label("No file selected")
-
+    
     def update_file_label(self, file_path):
         self.file_label.config(text=f"Loaded File: {self.audio_control.audio_model.file_name}")
 
