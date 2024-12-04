@@ -6,12 +6,12 @@ from models.audio_model import AudioModel
 
 class AudioControl:
     def __init__(self):
-        self.audio_model = AudioModel()  # Initializing the AudioModel instance
+        self.audio_model = AudioModel()  #initializing the AudioModel instance
     
     def load_file(self, file_path):
         '''Load audio file and perform validation'''
         try:
-            self.audio_model.load_file(file_path)  # Call AudioModel's load_file method
+            self.audio_model.load_file(file_path)  #call AudioModel's load_file method
             print(f"Audio file loaded: {self.audio_model.file_name}")
             return True
         except FileNotFoundError as fnfe:
@@ -23,7 +23,7 @@ class AudioControl:
 
     def get_file_metadata(self):
         '''Gets the metadata for the audio model'''
-        return self.audio_model.get_metadata()  # Call AudioModel's get_metadata
+        return self.audio_model.get_metadata()  #call AudioModel's get_metadata
 
     def analyze_audio(self):
         '''Analyze audio (could be expanded with more logic)'''
@@ -32,7 +32,7 @@ class AudioControl:
             return False
         
         print(f"Analyzing audio file: {self.audio_model.file_path}")
-        # Additional analysis logic could be added here
+        #additional analysis logic could be added here
         return True
     
     def get_waveform(self):
@@ -40,8 +40,8 @@ class AudioControl:
         if not self.audio_model.file_path:
             raise ValueError("No audio file loaded")
         
-        sample_rate, data = wavfile.read(self.audio_model.file_path)  # Load the data using scipy
-        fft_data = fft(data)  # Perform FFT on the data
-        frequencies = np.fftfreq(len(data), 1 / sample_rate)  # Get the frequency data
+        sample_rate, data = wavfile.read(self.audio_model.file_path) #load the data using scipy
+        fft_data = fft(data)  #perform FFT on the data
+        frequencies = np.fftfreq(len(data), 1 / sample_rate)  #get the frequency data
         return frequencies[:len(frequencies) // 2], np.abs(fft_data[:len(fft_data) // 2])  # Return positive frequencies and amplitudes
 

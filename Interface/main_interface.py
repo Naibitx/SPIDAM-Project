@@ -22,11 +22,11 @@ class MainInterface:
         self.file_label = tk.Label(self.load_frame, text="No file loaded", anchor='w')
         self.file_label.grid(row=0, column=1, padx=10, pady=5)  
 
-        # Frame to hold visualizations (waveform, frequency spectrum, RT60)
+        #frame to hold visualizations (waveform, frequency spectrum, RT60)
         self.visualization_frame = tk.Frame(self.root, bg="white", height=300)
         self.visualization_frame.grid(row=1, column=0, columnspan=2, sticky='nsew', padx=10, pady=10)
 
-        # Displaying metadata above the buttons
+        #displaying metadata above the buttons
         self.metadata_frame = tk.Frame(self.root)
         self.metadata_frame.grid(row=2, column=0, sticky='w', padx=10, pady=10)
 
@@ -36,7 +36,7 @@ class MainInterface:
         button_width= 20
         button_height= 1
 
-        # Buttons for visualization
+        #buttons for visualization
         self.buttons_frame = tk.Frame(self.root)
         self.buttons_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
 
@@ -46,14 +46,14 @@ class MainInterface:
         self.frequency_button = tk.Button(self.buttons_frame, text="Show ", command=self.visualize_frequency, width=button_width, height=button_height)
         self.frequency_button.grid(row=0, column=1, padx=10)
 
-        # RT60 Graph button
+        #RT60 Graph button
         self.rt60_var = tk.StringVar(self.root)
         self.rt60_var.set(self.bands[0])  # Default selection (low band)
         self.rt60_dropdown = tk.OptionMenu(self.buttons_frame, self.rt60_var, *self.bands, command=self.display_rt60_graph)
         self.rt60_dropdown.config(width=button_width, height=button_height)  
         self.rt60_dropdown.grid(row=0, column=2, padx=10, pady=10)
 
-        # Ensure that grid expands to fill available space
+        #ensure that grid expands to fill available space
         self.root.grid_rowconfigure(1, weight=1) 
         self.root.grid_rowconfigure(2, weight=0)  
         self.root.grid_rowconfigure(3, weight=0)  
@@ -64,7 +64,7 @@ class MainInterface:
             print("No audio to load")
             return
 
-        # Map dropdown values to band names
+        #map dropdown values to band names
         band_mapping = {
             "Low RT60 Graph": "low",
             "Mid RT60 Graph": "mid",
@@ -77,11 +77,11 @@ class MainInterface:
             print(f"Error: Invalid band selected: {selected_band}")
             return
 
-        # Clear any existing graph in the visualization frame
+        #clear any existing graph in the visualization frame
         for widget in self.visualization_frame.winfo_children():
             widget.destroy()
 
-        # Plot the new RT60 graph
+        #plot the new RT60 graph
         try:
             plot_rt60_bands(self.audio_control.audio_model.file_path, band, self.visualization_frame)
         except ValueError as e:

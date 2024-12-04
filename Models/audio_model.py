@@ -8,11 +8,12 @@ from pydub import AudioSegment
 
 
 
+'''Paths for ffmpeg and ffprobe'''
 AudioSegment.converter = "/usr/local/bin/ffmpeg"
 AudioSegment.ffprobe = "/usr/local/bin/ffprobe"
 
 class AudioModel:
-    def __init__(self, file_path=None):
+    def __init__(self, file_path=None):#initializing audio metadata and calculated properties attributes
         self.file_path = file_path
         self.file_name= None
         self.duration = None
@@ -24,28 +25,30 @@ class AudioModel:
         self.high_rt60 = 0.0
         self.all_rt60 = 0.0
 
-        if file_path:
+        if file_path:#file path provided, loads the audio file
             self.load_file(file_path)
 
-    def convert_to_wav(self, file_path): #conversion
-        if not file_path.endswith(".wav"):
-            audio = AudioSegment.from_file(file_path)
-            wav_path = f"{os.path.splitext(file_path)[0]}.wav"
-            audio.export(wav_path, format="wav")
+    def convert_to_wav(self, file_path): #conversionaudio to wav file
+        if not file_path.endswith(".wav"):# checks if file is already .wav
+            audio = AudioSegment.from_file(file_path)#loads audio file
+            wav_path = f"{os.path.splitext(file_path)[0]}.wav" #generates wav file path
+            audio.export(wav_path, format="wav")# exports audio as wav
             return wav_path
-        return file_path
+        return file_path # returns original path if already wav
 
     def load_file(self, file_path): #loads audio and extracts metadata
         self.file_path = self.convert_to_wav(file_path)
         if not os.path.exists(self.file_path):
             raise FileNotFoundError(f"File {file_path} does not exist")
 
-        self.file_name = os.path.basename(self.file_path)
-
+        self.file_name = os.path.basename(self.file_path)# gets file name
+        
+        '''Handles wav files'''
         if self.file_path.endswith(".wav"):
             sample_rate, data = wavfile.read(self.file_path)
             self.sample_rate = sample_rate
-            self.duration = len(data) / sample_rate
+            self.duration = len(data) / sample_rate #Calculates duration of audio
+            #calculates resonant frequency and RT60 difference
             self.resonant_frequency = self.calculate_resonant_frequency(data, sample_rate)
             self.rt60_diff = self.calculate_rt60_diff(data, sample_rate)
         else:
@@ -55,30 +58,23 @@ class AudioModel:
                 self.sample_rate = audio_file.info.sample_rate if hasattr(audio_file.info, 'sample_rate') else None
 
     def calculate_resonant_frequency(self, data, sample_rate):
-        ''' Calculate the resonant frequency using FFT '''
-        # Ensure that the data is in the correct format (1D array)
+        #ensure that the data is in the correct format (1D array)
         if len(data.shape) > 1:
-            data = data[:, 0]  # If stereo, take just one channel
+            data = data[:, 0]  #if stereo, take just one channel
 
-        # Perform FFT on the audio data
+        #perform FFT on the audio data
         fft_data = fft(data)
-
-        # Calculate frequency axis
-        frequencies = np.fft.fftfreq(len(fft_data), 1/sample_rate)
-
-        # Get the magnitude of the FFT (absolute value)
-        fft_magnitude = np.abs(fft_data)
-
-        # Find the index of the peak frequency
-        peak_freq_index = np.argmax(fft_magnitude)
+        frequencies = np.fft.fftfreq(len(fft_data), 1/sample_rate)#calculate frequency axis
+        fft_magnitude = np.abs(fft_data)#get the magnitude of the FFT (absolute value)
+        peak_freq_index = np.argmax(fft_magnitude) #find the index of the peak frequency
         peak_frequency = abs(frequencies[peak_freq_index])  # Get the positive frequency
-
         return peak_frequency
         
     def calculate_rt60_diff(self, data, sample_rate):
         if len (data.shape) > 1:
             data = data[:, 0]
-        bands_filter = {#this defines the low, mid and high bands 
+        #this defines the low, mid and high bands 
+        bands_filter = {
             'low': scipy.signal.butter(3, [100, 500], btype='band', fs=sample_rate, output='sos'),
             'mid': scipy.signal.butter(3, [500, 2000], btype='band', fs=sample_rate, output='sos'),
             'high': scipy.signal.butter(3, [2000, 8000], btype='band', fs=sample_rate, output='sos'),

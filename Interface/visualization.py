@@ -66,7 +66,7 @@ def plot_rt60_bands(file_path, band, tk_frame):
         "low": (100, 500),
         "mid": (500, 2000),
         "high": (2000, 8000),
-        "all": None  # All bands will combine low, mid, and high
+        "all": None #All bands will combine low, mid, and high
     }
 
     if band not in band_ranges:
@@ -76,7 +76,7 @@ def plot_rt60_bands(file_path, band, tk_frame):
     axis = fig.add_subplot(111)
 
     if band == "all":
-        # Plot all bands combined
+        #Plot all bands combined
         for band_name, (low, high) in band_ranges.items():
             if band_name != "all":
                 sos = scipy.signal.butter(3, [low, high], btype='band', fs=sample_rate, output='sos')
@@ -86,7 +86,7 @@ def plot_rt60_bands(file_path, band, tk_frame):
                 time = np.arange(len(energy_to_db)) / sample_rate
                 axis.plot(time, energy_to_db, label=f"{band_name.capitalize()} Band")
     else:
-        # Plot the selected band only
+        #Plot the selected band only
         low, high = band_ranges[band]
         sos = scipy.signal.butter(3, [low, high], btype='band', fs=sample_rate, output='sos')
         filtered_signal = scipy.signal.sosfilt(sos, data)
@@ -102,7 +102,7 @@ def plot_rt60_bands(file_path, band, tk_frame):
     axis.set_ylabel("Energy (dB)")
     axis.legend()
 
-    # Clear the Tkinter frame and embed the plot
+    #Clear the Tkinter frame and embed the plot
     for widget in tk_frame.winfo_children():
         widget.destroy()
 
