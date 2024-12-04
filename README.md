@@ -12,4 +12,6 @@ This project was developed as part of a course on audio processing and visualiza
 - **Spectrogram**: Display a spectrogram of the audio file to analyze frequency content.
 - **RT60 Graphs**: Visualize the decay of sound energy across different frequency bands (low, mid, high).
 - **Interactive Interface**: Easily load and interact with audio files through a simple user interface.
+
+  
 ▶︎····|||||၊၊||၊||။||||၊၊|||||၊၊||၊||။||||၊|||||၊၊||၊||။||||၊၊၊၊|||||၊၊||၊||။||||··|||||၊၊||၊||။||||၊၊|||||၊၊||၊||။||||၊|||||၊၊||၊||။||||၊၊၊၊|||||၊၊||၊||။|||| 
