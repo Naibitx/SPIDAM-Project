@@ -18,10 +18,10 @@ class MainInterface:
         self.load_frame = tk.Frame(self.root, bg="#002300")
         self.load_frame.grid(row=0, column=0, sticky='w', padx=10, pady=10)
 
-        self.load_button = tk.Button(self.load_frame, text="Load File", command=self.load_file, bg="#002300", highlightbackground="white")
+        self.load_button = tk.Button(self.load_frame, text="Load File", command=self.load_file, )
         self.load_button.grid(row=0, column=0, padx=10, pady=5) 
 
-        self.file_label = tk.Label(self.load_frame, text="No file loaded", anchor='w',  bg="#002300")
+        self.file_label = tk.Label(self.load_frame, text="No file loaded", anchor='w',  bg="#002300", fg="white")
         self.file_label.grid(row=0, column=1, padx=10, pady=5)  
 
         #displaying metadata above the buttons
