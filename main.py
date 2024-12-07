@@ -8,12 +8,14 @@ def main():
     
     root = tk.Tk()
     root.title("Data Acoustic Modeling Application")
-    root.geometry("800x800")
+    root.geometry("1000x800")
+    root.configure(bg="#002300")
 
     audio_control = AudioControl()
 
     interface = MainInterface(root, audio_control)
     audio_control.view = interface
+
     root.mainloop()
 
 

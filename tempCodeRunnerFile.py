@@ -1,1 +1,2 @@
-a
+
+    audio_control = AudioControl()
