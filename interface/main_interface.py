@@ -130,7 +130,7 @@ class MainInterface:
 
         metadata_text = "\n".join([f"{key} {value}" for key, value in metadata.items()])
 
-        self.metadata_label.config(text=metadata_text,font=("Courier New", 18, "white"))
+        self.metadata_label.config(text=metadata_text,font=("Courier New", 18), fg="white")
     def analyze_audio(self):
         if not self.audio_control.analyze_audio():
             print("Failed to analyze audio file")
