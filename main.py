@@ -9,7 +9,7 @@ def main():
     root = tk.Tk()
     root.title("Data Acoustic Modeling Application")
     root.geometry("1000x800")
-    root.configure(bg="#819381")
+    root.configure(bg="#5D745D")
 
     audio_control = AudioControl()
 
