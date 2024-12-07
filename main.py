@@ -9,7 +9,6 @@ def main():
     root = tk.Tk()
     root.title("Data Acoustic Modeling Application")
     root.geometry("800x800")
-    root.resizable(0,0)
 
     audio_control = AudioControl()
 
