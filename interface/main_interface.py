@@ -40,7 +40,7 @@ class MainInterface:
         button_height= 1
 
         #buttons for visualization
-        self.buttons_frame = tk.Frame(self.root, bg="#5D745D", highlightbackground="white")
+        self.buttons_frame = tk.Frame(self.root, bg="#5D745D")
         self.buttons_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
 
         self.waveform_button = tk.Button(self.buttons_frame, text="Show Waveform", command=self.visualize_waveform, width=button_width, height=button_height)
