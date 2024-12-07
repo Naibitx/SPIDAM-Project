@@ -56,11 +56,15 @@ class MainInterface:
         self.rt60_dropdown.config(width=button_width, height=button_height)  
         self.rt60_dropdown.grid(row=0, column=2, padx=10, pady=10)
 
+        self.exit_button = tk.Button(self.buttons_frame, text="Exit",command=self.exit_program)
+        self.exit_button.grid(row=0, column=5, padx=5)
+
         #ensure that grid expands to fill available space
         self.root.grid_rowconfigure(1, weight=1) 
         self.root.grid_rowconfigure(2, weight=0)  
         self.root.grid_rowconfigure(3, weight=0)  
         self.root.grid_columnconfigure(0, weight=1)
+
 
     def display_rt60_graph(self, selected_band):
         if not self.audio_control.audio_model.file_path:
@@ -132,3 +136,7 @@ class MainInterface:
         if not self.audio_control.analyze_audio():
             print("Failed to analyze audio file")
 
+    def exit_program(self):
+        # Close the applicationx
+        print("Exiting application...")
+        self.root.destroy()
