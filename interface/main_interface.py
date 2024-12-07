@@ -18,17 +18,17 @@ class MainInterface:
         self.load_frame = tk.Frame(self.root, bg="#002300")
         self.load_frame.grid(row=0, column=0, sticky='w', padx=10, pady=10)
 
-        self.load_button = tk.Button(self.load_frame, text="Load File", command=self.load_file, bg="#002300", highlightbackground="#002300",highlightcolor="#002300")
+        self.load_button = tk.Button(self.load_frame, text="Load File", command=self.load_file, bg="#002300", highlightbackground="#002300")
         self.load_button.grid(row=0, column=0, padx=10, pady=5) 
 
         self.file_label = tk.Label(self.load_frame, text="No file loaded", anchor='w',  bg="#002300")
         self.file_label.grid(row=0, column=1, padx=10, pady=5)  
 
         #displaying metadata above the buttons
-        self.metadata_frame = tk.Frame(self.root, bg="#002300", highlightbackground="#002300", highlightcolor="#002300")
+        self.metadata_frame = tk.Frame(self.root, bg="#002300", highlightbackground="#002300")
         self.metadata_frame.grid(row=2, column=0, sticky='w', padx=10, pady=10)
 
-        self.metadata_label = tk.Label(self.metadata_frame, text="", justify="left", bg="#002300", highlightbackground="#002300", highlightcolor="#002300")
+        self.metadata_label = tk.Label(self.metadata_frame, text="", justify="left", bg="#002300", highlightbackground="#002300")
         self.metadata_label.grid(row=0, column=0, padx=10, pady=5)
 
         #frame to hold visualizations (waveform, frequency spectrum, RT60)
@@ -40,23 +40,23 @@ class MainInterface:
         button_height= 1
 
         #buttons for visualization
-        self.buttons_frame = tk.Frame(self.root, bg="#002300", highlightbackground="#002300", highlightcolor="#002300")
+        self.buttons_frame = tk.Frame(self.root, bg="#002300", highlightbackground="#002300")
         self.buttons_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
 
-        self.waveform_button = tk.Button(self.buttons_frame, text="Show Waveform", command=self.visualize_waveform, width=button_width, height=button_height, bg="#002300", highlightbackground="#002300",highlightcolor="#002300")
+        self.waveform_button = tk.Button(self.buttons_frame, text="Show Waveform", command=self.visualize_waveform, width=button_width, height=button_height, bg="#002300", highlightbackground="#002300")
         self.waveform_button.grid(row=0, column=0, padx=10)
 
-        self.frequency_button = tk.Button(self.buttons_frame, text="Show Intensity ", command=self.visualize_frequency, width=button_width, height=button_height, bg="#002300", highlightbackground="#002300",highlightcolor="#002300")
+        self.frequency_button = tk.Button(self.buttons_frame, text="Show Intensity ", command=self.visualize_frequency, width=button_width, height=button_height, bg="#002300", highlightbackground="#002300")
         self.frequency_button.grid(row=0, column=1, padx=10)
 
         #RT60 Graph button
         self.rt60_var = tk.StringVar(self.root)
         self.rt60_var.set(self.bands[0])  # Default selection (low band)
         self.rt60_dropdown = tk.OptionMenu(self.buttons_frame, self.rt60_var, *self.bands, command=self.display_rt60_graph)
-        self.rt60_dropdown.config(width=button_width, height=button_height, bg="#002300", highlightbackground="#002300",highlightcolor="#002300")  
+        self.rt60_dropdown.config(width=button_width, height=button_height, bg="#002300", highlightbackground="#002300")  
         self.rt60_dropdown.grid(row=0, column=2, padx=10, pady=10)
 
-        self.exit_button = tk.Button(self.buttons_frame, text="Exit",command=self.exit_program, bg="#002300", highlightbackground="#002300",highlightcolor="#002300")
+        self.exit_button = tk.Button(self.buttons_frame, text="Exit",command=self.exit_program, bg="#002300", highlightbackground="#002300")
         self.exit_button.grid(row=0, column=3, padx=50)
 
         #ensure that grid expands to fill available space
