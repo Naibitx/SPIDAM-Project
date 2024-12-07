@@ -3,6 +3,7 @@ from matplotlib.figure import Figure
 from scipy.io import wavfile
 from scipy.signal import spectrogram
 import scipy.signal
+import customtkinter as ctk
 import tkinter as tk
 import matplotlib.pyplot as plt
 import numpy as np

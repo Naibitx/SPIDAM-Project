@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-from PIL import Image, ImageTk 
+import customtkinter as ctk
 from controls.audio_control import AudioControl
 from interface.visualization import plot_frequency, plot_waveform, plot_rt60_bands
 
@@ -14,6 +14,7 @@ class MainInterface:
         self.setup_ui()
 
     def setup_ui(self):
+
         self.load_frame = tk.Frame(self.root)
         self.load_frame.grid(row=0, column=0, sticky='w', padx=10, pady=10)
 

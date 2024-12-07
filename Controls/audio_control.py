@@ -4,6 +4,7 @@ from scipy.io import wavfile
 from scipy.fft import fft
 from models.audio_model import AudioModel
 
+
 class AudioControl:
     def __init__(self):
         self.audio_model = AudioModel()  #initializing the AudioModel instance
